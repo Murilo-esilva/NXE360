@@ -26,8 +26,6 @@
     right: document.getElementById('snd-panel-right')
   };
 
-  let currentCardIndex = 0;
-
   function play(name) {
     try {
       const a = sounds[name];
@@ -42,28 +40,19 @@
     const k = ev.key;
 
     if (k === 'ArrowLeft') {
-      if (currentCardIndex > 0) {
-        currentCardIndex--;
-        scene3D.currentCardIndex = currentCardIndex;
-        scene3D.updateCardTransforms();
-        scene3D.isAnimating = true;
-        scene3D.animationStartTime = Date.now();
+      if (scene3D.navigate(-1)) {
         play('left');
         ev.preventDefault();
       }
     } else if (k === 'ArrowRight') {
-      if (currentCardIndex < scene3D.cardData.length - 1) {
-        currentCardIndex++;
-        scene3D.currentCardIndex = currentCardIndex;
-        scene3D.updateCardTransforms();
-        scene3D.isAnimating = true;
-        scene3D.animationStartTime = Date.now();
+      if (scene3D.navigate(1)) {
         play('right');
         ev.preventDefault();
       }
     } else if (k === 'Enter' || k === ' ') {
+      const selectedCard = scene3D.getCurrentCard();
       play('select');
-      console.log('Selected card', currentCardIndex, scene3D.cardData[currentCardIndex].title);
+      console.log('Selected card', selectedCard.index, selectedCard.title);
       ev.preventDefault();
     } else if (k === 'Escape') {
       play('back');

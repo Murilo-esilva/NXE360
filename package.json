@@ -6,13 +6,18 @@
   "scripts": {
     "start": "electron .",
     "dev": "electron . --inspect=5858",
-    "test": "node server.js",
+    "serve": "node server.js",
+    "test": "node --check server.js && node --check src/main.js && node --check src/ui.js",
     "build": "electron-builder",
     "pack": "electron-builder --dir"
   },
   "author": "Simon",
   "license": "MIT",
+  "dependencies": {
+    "three": "^0.181.2"
+  },
   "devDependencies": {
-    "electron": "^42.2.0"
+    "electron": "^42.2.0",
+    "electron-builder": "^26.0.12"
   }
 }

@@ -1,7 +1,7 @@
 // Xbox 360 NXE 3D Scene using Three.js
 // Implements the full 3D "Twist" navigation and reflective floor layout
 
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@r128/build/three.module.js';
+import * as THREE from 'three';
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x0a0a0a);
@@ -138,7 +138,6 @@ for (let i = 0; i < 8; i++) {
 
 // ===== THE "TWIST" NAVIGATION ALGORITHM =====
 let currentCardIndex = 0;
-let currentChannelIndex = 0;
 
 function updateCardTransforms() {
   cardData.forEach((card, idx) => {
@@ -172,6 +171,16 @@ function updateCardTransforms() {
 
 updateCardTransforms();
 
+function applyCardTransforms() {
+  cardData.forEach((card) => {
+    card.mesh.position.copy(card.targetPos);
+    card.mesh.quaternion.copy(card.targetRot);
+    card.mesh.scale.copy(card.baseScale);
+  });
+}
+
+applyCardTransforms();
+
 // ===== EASING FUNCTIONS (As per spec) =====
 function easeQuinticOut(t) {
   // cubic-bezier(0.25, 1.0, 0.33, 1.0)
@@ -183,7 +192,6 @@ function easeCardScroll(t) {
 }
 
 // ===== ANIMATION LOOP & SMOOTH INTERPOLATION =====
-let animationTime = 0;
 const CARD_TRANSITION_DURATION = 0.35; // 350ms
 let isAnimating = false;
 let animationStartTime = 0;
@@ -227,22 +235,23 @@ function animate() {
   renderer.render(scene, camera);
 }
 
-// ===== KEYBOARD NAVIGATION =====
-document.addEventListener('keydown', (e) => {
-  if (isAnimating) return;
-  
-  if (e.key === 'ArrowRight') {
-    currentCardIndex = Math.min(currentCardIndex + 1, cardData.length - 1);
-    updateCardTransforms();
-    isAnimating = true;
-    animationStartTime = Date.now();
-  } else if (e.key === 'ArrowLeft') {
-    currentCardIndex = Math.max(currentCardIndex - 1, 0);
-    updateCardTransforms();
-    isAnimating = true;
-    animationStartTime = Date.now();
-  }
-});
+function navigateCards(delta) {
+  if (isAnimating) return false;
+
+  const nextIndex = Math.max(0, Math.min(currentCardIndex + delta, cardData.length - 1));
+  if (nextIndex === currentCardIndex) return false;
+
+  currentCardIndex = nextIndex;
+  updateCardTransforms();
+  isAnimating = true;
+  animationStartTime = Date.now();
+
+  return true;
+}
+
+function getCurrentCard() {
+  return cardData[currentCardIndex];
+}
 
 // ===== WINDOW RESIZE HANDLER =====
 window.addEventListener('resize', () => {
@@ -259,6 +268,8 @@ export {
   cardData,
   currentCardIndex,
   updateCardTransforms,
+  navigateCards,
+  getCurrentCard,
   particles,
   floor
 };
@@ -269,13 +280,21 @@ window.nxeScene = {
   camera,
   renderer,
   cardData,
-  currentCardIndex,
   updateCardTransforms,
+  navigate: navigateCards,
+  getCurrentCard,
   particles,
   floor,
-  isAnimating,
-  animationStartTime,
-  CARD_TRANSITION_DURATION
+  CARD_TRANSITION_DURATION,
+  get currentCardIndex() {
+    return currentCardIndex;
+  },
+  get isAnimating() {
+    return isAnimating;
+  },
+  get animationStartTime() {
+    return animationStartTime;
+  }
 };
 
 // Start animation loop
