@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>NXE Launcher - 3D Edition</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    html, body, #canvas-container {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: #000;
+    }
+  </style>
+</head>
+<body>
+  <!-- 3D Canvas Container for Three.js -->
+  <div id="canvas-container" style="width:100%;height:100%;margin:0;padding:0;display:block;"></div>
+
+  <!-- Legacy 2D Elements (Hidden, preserved for fallback) -->
+  <div id="app" style="display:none;">
+    <div id="bg-rings" aria-hidden="true">
+      <img src="../_reference_material/xbox-360-dash/assets/images/bgrings/bg_ring1.png" class="ring r1">
+      <img src="../_reference_material/xbox-360-dash/assets/images/bgrings/bg_ring2.png" class="ring r2">
+      <img src="../_reference_material/xbox-360-dash/assets/images/bgrings/bg_ring3.png" class="ring r3">
+      <img src="../_reference_material/xbox-360-dash/assets/images/bgrings/bg_ring4.png" class="ring r4">
+    </div>
+    <header id="topbar" role="banner">
+      <div class="left">
+        <img src="../xbox-360-dash/app/images/Xbox_360_Logo.svg" alt="Xbox" class="logo">
+      </div>
+      <div class="center"></div>
+      <div class="right">
+        <div id="gamerpic" class="gamerpic"></div>
+        <div id="gamertag">PlayerOne</div>
+        <div id="clock"></div>
+      </div>
+    </header>
+
+    <div class="stage-wrap">
+      <main id="stage" role="main">
+      <section id="left-pedestal" class="panel">
+        <div class="avatar-placeholder">Avatar</div>
+      </section>
+
+      <section id="featured" class="panel">
+        <div class="featured-card">
+          <div class="title">Featured Game</div>
+          <div class="meta">Press A to launch</div>
+        </div>
+      </section>
+      </main>
+    </div>
+
+    <nav id="section-tabs" role="navigation">
+      <ul>
+        <li class="active" data-index="0" tabindex="0">My Xbox</li>
+        <li data-index="1" tabindex="0">Games</li>
+        <li data-index="2" tabindex="0">Media</li>
+        <li data-index="3" tabindex="0">Xbox Live</li>
+        <li data-index="4" tabindex="0">Settings</li>
+      </ul>
+    </nav>
+
+    <section id="content-row">
+      <div class="rail">
+        <!-- Tiles will be populated here -->
+        <div class="tile" data-index="0" tabindex="0">Tile 1</div>
+        <div class="tile" data-index="1" tabindex="0">Tile 2</div>
+        <div class="tile" data-index="2" tabindex="0">Tile 3</div>
+        <div class="tile" data-index="3" tabindex="0">Tile 4</div>
+        <div class="tile" data-index="4" tabindex="0">Tile 5</div>
+      </div>
+    </section>
+
+    <footer id="hintbar" role="contentinfo">
+      <div class="hints">
+        <img src="../pegasus-theme-npe/assets/images/buttons/a.png" alt="A" class="btn"> : Select
+        <img src="../pegasus-theme-npe/assets/images/buttons/b.png" alt="B" class="btn"> : Back
+      </div>
+    </footer>
+  </div>
+
+  <!-- Audio assets mapped to reference files -->
+  <audio id="snd-focus" src="../_reference_material/xbox-360-dash/assets/audio/focus.wav" preload="auto"></audio>
+  <audio id="snd-select" src="../_reference_material/xbox-360-dash/assets/audio/select.wav" preload="auto"></audio>
+  <audio id="snd-back" src="../_reference_material/xbox-360-dash/assets/audio/back.wav" preload="auto"></audio>
+  <audio id="snd-panel-left" src="../_reference_material/xbox-360-dash/assets/audio/panel-left.wav" preload="auto"></audio>
+  <audio id="snd-panel-right" src="../_reference_material/xbox-360-dash/assets/audio/panel-right.wav" preload="auto"></audio>
+
+  <!-- Three.js 3D Scene (Primary renderer) -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@r128/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@r128/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module" src="3d-scene.js"></script>
+  <script src="ui.js"></script>
+</body>
+</html>
