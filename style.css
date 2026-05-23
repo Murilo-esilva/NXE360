@@ -1,0 +1,111 @@
+:root{
+  --bg:#000000;
+  --accent:#3bb043; /* NXE green accent (from reference) */
+  --accent-strong: #356635;
+  --accent-glow: rgba(59,176,67,0.18);
+  --panel-top: #50616e;
+  --panel-mid: #283743;
+  --panel-bottom: #29333d;
+  --muted:#616161;
+  --meta-color: rgba(255,255,255,0.34); /* approx for 55FFFFFF */
+  --meta-strong: rgba(255,255,255,0.5); /* approx for 80FFFFFF */
+  --panels-width:1000px;
+  --panels-height:600px;
+  --nav-height:80px;
+  --topbar-h:38px;
+  --hintbar-h:28px;
+  --content-gap:24px;
+  --ui-fg:#cfeee0;
+  --panel-bg: linear-gradient(180deg, var(--panel-top), var(--panel-mid) 60%, var(--panel-bottom));
+  font-size:16px;
+}
+*{box-sizing:border-box}
+html,body,#app{height:100%;margin:0}
+body{
+  background:var(--bg);
+  color:var(--ui-fg);
+  font-family: 'ConvectionUI', 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial;
+}
+
+@font-face{
+  font-family: 'ConvectionUI';
+  src: url('../_reference_material/xbox-360-dash/assets/fonts/convectionui.ttf') format('truetype');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+#topbar{
+  height:var(--topbar-h);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 18px;
+  border-bottom:1px solid rgba(255,255,255,0.04);
+  background: transparent;
+}
+#topbar .logo{height:22px}
+#topbar .right{display:flex;align-items:center;gap:12px}
+
+#gamertag{font-weight:700;margin-right:6px}
+.gamerpic{width:36px;height:36px;background:linear-gradient(180deg,#2b2b2b,#111);border-radius:4px;box-shadow:inset 0 1px 0 rgba(255,255,255,0.02)}
+
+.stage-wrap{max-width:1400px;margin:0 auto}
+#stage{
+  display:grid;
+  /* left pedestal + central panel area (use legacy panels width) */
+  grid-template-columns: 360px 1000px;
+  gap:var(--content-gap);
+  padding:36px 48px;
+  align-items:start;
+}
+.panel{min-height:var(--panels-height)}
+.avatar-placeholder{width:320px;height:var(--panels-height);background:linear-gradient(180deg,rgba(255,255,255,0.03),transparent);display:flex;align-items:center;justify-content:center;font-weight:600}
+.featured-card{position:relative;height:var(--panels-height);background:var(--panel-bg);padding:24px;border-radius:6px;overflow:hidden}
+
+/* panel shadow and reflection from reference assets */
+.featured-card::before{
+  content:"";position:absolute;inset:0;pointer-events:none;background-image:url('../_reference_material/xbox-360-dash/assets/images/misc/panel-shadow.png');background-repeat:no-repeat;background-position:center;background-size:cover;opacity:0.9}
+.featured-card::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:40%;background-image:url('../_reference_material/xbox-360-dash/assets/images/misc/panel-reflection.png');background-repeat:no-repeat;background-position:bottom center;background-size:contain;opacity:0.18;pointer-events:none}
+
+#section-tabs{height:var(--nav-height);display:flex;align-items:center;padding:0 48px}
+#section-tabs ul{display:flex;list-style:none;padding:0;margin:0;gap:28px}
+#section-tabs li{padding:6px 12px;border-radius:4px;color:var(--ui-fg);opacity:0.95;display:flex;align-items:center;height:100%}
+#section-tabs li.active{background:linear-gradient(90deg,var(--accent-glow), rgba(59,176,67,0.06));box-shadow:0 8px 28px rgba(0,0,0,0.7);color:#fff}
+
+#content-row{padding:18px 48px}
+.rail{display:flex;gap:18px;overflow:hidden}
+.tile{width:300px;height:170px;background:rgba(0,0,0,0.16);border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--meta-strong);font-weight:600}
+
+/* Focus styling for keyboard navigation */
+.focused{outline:0;box-shadow:0 6px 24px var(--accent-glow), inset 0 0 18px rgba(59,176,67,0.04);transform:translateY(-6px);border-radius:6px}
+.selected{box-shadow:0 14px 48px rgba(0,0,0,0.7);}
+
+#hintbar{height:var(--hintbar-h);display:flex;align-items:center;padding:0 18px;border-top:1px solid rgba(255,255,255,0.03)}
+.hints{display:flex;gap:12px;align-items:center}
+.hints .btn{height:18px;vertical-align:middle;margin-right:6px}
+
+/* Background rings (initial placeholder): use pegasus assets if available */
+body::before{
+  content:"";
+  position:fixed;left:0;top:0;right:0;bottom:0;pointer-events:none;z-index:0
+}
+
+/* Background rings container */
+#bg-rings{position:fixed;left:22%;top:48%;width:900px;height:900px;transform:translate(-50%,-50%);pointer-events:none;z-index:0}
+#bg-rings .ring{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(0.8);opacity:0.06;filter:blur(6px);width:100%;height:100%;object-fit:contain}
+#bg-rings .r1{animation:ringPulse 6s linear infinite}
+#bg-rings .r2{animation:ringPulse 6s linear infinite;animation-delay:1.2s;opacity:0.05}
+#bg-rings .r3{animation:ringPulse 6s linear infinite;animation-delay:2.4s;opacity:0.04}
+#bg-rings .r4{animation:ringPulse 6s linear infinite;animation-delay:3.6s;opacity:0.03}
+
+@keyframes ringPulse{
+  0%{transform:translate(-50%,-50%) scale(0.7);opacity:0.06}
+  50%{transform:translate(-50%,-50%) scale(1);opacity:0.08}
+  100%{transform:translate(-50%,-50%) scale(1.05);opacity:0.02}
+}
+
+@media (max-width:1280px){
+  /* graceful downscale */
+  :root{font-size:14px}
+  #stage{grid-template-columns:260px 1fr;padding:18px}
+}
